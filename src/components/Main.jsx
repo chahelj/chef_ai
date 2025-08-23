@@ -1,5 +1,8 @@
 import React from "react"
 import IngredientsList from "./IngredientsList"
+import { useState } from "react"
+import getRecipeAI from "../ai"
+import Recipe from "./Recipe"
 
 export default function Main(){
      
@@ -13,7 +16,13 @@ export default function Main(){
     
     
     
-    
+    const [showRecipe, setShowRecipe] = React.useState(false)
+    const [recipe, setRecipe] = React.useState("")
+    async function getRecipe() {
+        setRecipe(await getRecipeAI(ingredients))
+        setShowRecipe(true)
+        console.log(recipe)
+    }
     return(
         <main>
             <form action={addIngredient} className="Main--ingredient-form">
@@ -25,8 +34,20 @@ export default function Main(){
                 />
                 <button>Add ingredient</button>
             </form>
-            {ingredientsListItems.length>0?<IngredientsList ingredientsListItems={ingredientsListItems} />: null}
-            
+            {ingredientsListItems.length>0?<IngredientsList ingredientsListItems={ingredientsListItems} ingredients={ingredients} setRecipe= {setRecipe} setShowRecipe = {setShowRecipe}/>: null}
+            {ingredientsListItems.length>4?<div className="get-recipe-container">
+                    <section>
+                        <h1>Ready for a recipe?</h1>
+                        <h2>Generate a recipe from your list of ingredients.</h2>
+                    </section>
+                    <button  onClick={getRecipe}>Get a recipe</button>
+                    </div>:null}
+            {showRecipe?<section className="recipe-container">
+                <div>
+                   <Recipe RECIPE={recipe}/> 
+                </div>
+            </section>: null
+                }
         </main>
     )
 }
