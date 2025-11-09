@@ -1,8 +1,14 @@
-export default function Recipe() {
+import Markdown from "react-markdown";
+export default function Recipe({RECIPE}) {
+    
+    
     return (
-        <div>
-            <h1>Recipe Component</h1>
-            {/* Additional content can be added here */}  
+        <div className="suggested-recipe-container">
+
+            <Markdown>{RECIPE}</Markdown>
         </div>
     );
+
 }
+        
+
